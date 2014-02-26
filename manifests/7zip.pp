@@ -1,5 +1,6 @@
+# Ensure that 7zip is installed
 class dotnetcms::7zip {
-  
+
   # This class makes use of the staging::file defined type in order to take
   # advantage of a centrally defined file staging directory. Specifically,
   # $staging::path. In Puppet at the time of writing, however, parse order is
@@ -18,15 +19,16 @@ class dotnetcms::7zip {
   #
   #  include 7zip
   #  include profile::staging
-  
-  staging::file {'7z920-x64.msi':
+
+  staging::file { '7z920-x64.msi':
+    target => 'C:\staging\7z920-x64.msi',
     source => 'http://master/7zip/7z920-x64.msi',
   }
 
   package { '7-Zip':
     ensure  => installed,
     name    => '7-Zip 9.20 (x64 edition)',
-    source  => 'C:\staging\dotnetcms\7z920-x64.msi',
+    source  => 'C:\staging\7z920-x64.msi',
     require => Staging::File['7z920-x64.msi'],
   }
 

@@ -1,3 +1,4 @@
+# Class to deploy simple .NET application
 class dotnetcms {
 
   require dotnetcms::7zip
@@ -8,14 +9,15 @@ class dotnetcms {
     when => pending,
   }
 
-  staging::file {'dotNetFx40_Full_x86_x64.exe':
+  staging::file { 'dotNetFx40_Full_x86_x64.exe':
+    target => 'C:\staging\dotNetFx40_Full_x86_x64.exe',
     source => 'http://master/dotnetcms/dotNetFx40_Full_x86_x64.exe',
     before => Package['Microsoft .NET Framework 4 Client Profile'],
   }
-  
-  file { 'C:\staging\dotnetcms\dotNetFx40_Full_x86_x64.exe':
+
+  file { 'C:\staging\dotNetFx40_Full_x86_x64.exe':
     ensure  => file,
-    mode    => 0755,
+    mode    => '0755',
     require => Staging::File['dotNetFx40_Full_x86_x64.exe'],
     before  => Package['Microsoft .NET Framework 4 Client Profile'],
   }
@@ -27,7 +29,7 @@ class dotnetcms {
     before          => Exec['extract_cms4'],
     notify          => Exec['register_net_with_iis'],
   }
-  
+
   reboot { 'after':
     subscribe => Package['Microsoft .NET Framework 4 Client Profile'],
   }
@@ -36,14 +38,15 @@ class dotnetcms {
     command     => 'C:\Windows\Microsoft.NET\Framework64\v4.0.30319\aspnet_regiis.exe -i',
     refreshonly => true,
   }
- 
+
   staging::file { 'CMS4.06.zip':
+    target => 'C:\staging\CMS4.06.zip',
     source => 'http://master/dotnetcms/CMS4.06.zip',
   }
 
   exec { 'extract_cms4':
     path      => 'C:\Program Files\7-Zip',
-    command   => '7z.exe x C:\staging\dotnetcms\CMS4.06.zip -oC:\cms4app',
+    command   => '7z.exe x C:\staging\CMS4.06.zip -oC:\cms4app',
     creates   => 'C:\cms4app',
     subscribe => Staging::File['CMS4.06.zip'],
   }
@@ -68,7 +71,7 @@ class dotnetcms {
     applicationpool => 'CMS4',
     require         => Exec['extract_cms4'],
   }
-  
+
   iis_vdir {'CMS4/':
     ensure       => present,
     iis_app      => 'CMS4/',
