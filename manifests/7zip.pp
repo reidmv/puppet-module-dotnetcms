@@ -19,7 +19,8 @@ class dotnetcms::7zip {
   #  include 7zip
   #  include profile::staging
   
-  staging::file {'C:\staging\7z920-x64.msi':
+  staging::file { '7z920-x64.msi':
+    target => 'C:\staging\7z920-x64.msi',
     source => 'http://master/7zip/7z920-x64.msi',
   }
 
@@ -27,7 +28,7 @@ class dotnetcms::7zip {
     ensure  => installed,
     name    => '7-Zip 9.20 (x64 edition)',
     source  => 'C:\staging\7z920-x64.msi',
-    require => Staging::File['C:\staging\7z920-x64.msi'],
+    require => Staging::File['7z920-x64.msi'],
   }
 
 }

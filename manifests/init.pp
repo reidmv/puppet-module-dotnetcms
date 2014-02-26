@@ -8,15 +8,16 @@ class dotnetcms {
     when => pending,
   }
 
-  staging::file {'C:\staging\dotNetFx40_Full_x86_x64.exe':
+  staging::file { 'dotNetFx40_Full_x86_x64.exe':
+    target => 'C:\staging\dotNetFx40_Full_x86_x64.exe',
     source => 'http://master/dotnetcms/dotNetFx40_Full_x86_x64.exe',
     before => Package['Microsoft .NET Framework 4 Client Profile'],
   }
-  
+
   file { 'C:\staging\dotNetFx40_Full_x86_x64.exe':
     ensure  => file,
     mode    => 0755,
-    require => Staging::File['C:\staging\dotNetFx40_Full_x86_x64.exe'],
+    require => Staging::File['dotNetFx40_Full_x86_x64.exe'],
     before  => Package['Microsoft .NET Framework 4 Client Profile'],
   }
 
@@ -37,15 +38,16 @@ class dotnetcms {
     refreshonly => true,
   }
  
-  staging::file { 'C:\staging\CMS4.06.zip':
+  staging::file { 'CMS4.06.zip':
+    target => 'C:\staging\CMS4.06.zip',
     source => 'http://master/dotnetcms/CMS4.06.zip',
   }
 
   exec { 'extract_cms4':
-    path        => 'C:\Program Files\7-Zip',
-    command     => '7z.exe x C:\staging\CMS4.06.zip -oC:\cms4app',
-    refreshonly => true,
-    subscribe   => Staging::File['C:\staging\CMS4.06.zip'],
+    path      => 'C:\Program Files\7-Zip',
+    command   => '7z.exe x C:\staging\CMS4.06.zip -oC:\cms4app',
+    creates   => 'C:\cms4app',
+    subscribe => Staging::File['CMS4.06.zip'],
   }
 
   iis_apppool { 'CMS4':
