@@ -24,7 +24,7 @@ class dotnetcms {
 
   package { 'Microsoft .NET Framework 4 Client Profile':
     ensure          => installed,
-    source          => 'C:\staging\dotnetcms\dotNetFx40_Full_x86_x64.exe',
+    source          => 'C:\staging\dotNetFx40_Full_x86_x64.exe',
     install_options => ['/q', '/norestart'],
     before          => Exec['extract_cms4'],
     notify          => Exec['register_net_with_iis'],
